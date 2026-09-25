@@ -1,8 +1,8 @@
 {
   "workspace": ".",
   "javascript_sast_enabled": true,
-  "javascript_disabled_rules": "js-unhandled-promise-rejection,js-sensitive-data-in-logs,js-express-async-no-error-handler,js-error-stack-exposed,js-prototype-pollution",
-  "sast_ignore_overrides": "js-code-injection-eval:sdk/src/shared/simulate.ts,js-code-injection-eval:sdk/src/shared/timeout.ts",
+  "javascript_disabled_rules": "js-unhandled-promise-rejection",
+  "sast_ignore_overrides": "js-code-injection-eval:sdk/src/shared/simulate.ts,js-code-injection-eval:sdk/src/shared/timeout.ts,js-sensitive-data-in-logs:sdk/src/channel/server/Channel.ts,js-sensitive-data-in-logs:sdk/src/charge/server/Charge.ts",
   "secret_scanning_enabled": true,
   "console_tabular_enabled": true,
   "socket_tier_1_enabled": false,
