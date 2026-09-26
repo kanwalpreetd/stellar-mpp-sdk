@@ -1,7 +1,5 @@
-# Paths excluded from SAST scanning (Socket Basics / OpenGrep).
-#
-# This file replaces built-in file ignore list for scanning, required to make
-# the scan more accurate.
+# This file excludes scan paths from Socket Basics SAST scanning (through OpenGrep).
+# It replaces the built-in ignore list for scanning with a more thorough list of paths.
 
 # --- third-party / generated ---
 .git/
