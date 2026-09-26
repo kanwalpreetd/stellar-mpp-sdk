@@ -6,9 +6,6 @@
 # This workflow does SAST through OpenGrep, secret scanning through TruffleHog,
 # Dockerfile misconfiguration scanning through Trivy, and submits results to
 # Socket.dev
-#
-# Schedule: Saturday 14:51 UTC. socket-scan.yml occupies minutes
-# :00 :12 :24 :36 :48 of every hour, so this repo's slot avoids those.
 
 name: Socket Basics security scan
 
