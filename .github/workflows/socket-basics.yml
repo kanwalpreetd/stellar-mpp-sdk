@@ -75,6 +75,17 @@ jobs:
             exit 1
           fi
 
+          # socket-basics has a single exit path: 1 when high/critical findings
+          # are present, 0 otherwise. It emits no distinct code for operational
+          # failure, so rc and the findings count must agree. A disagreement
+          # means the container died after writing the results file, which the
+          # components check above cannot see.
+          expected=0; [ "${findings:-0}" -gt 0 ] && expected=1
+          if [ "${rc:-1}" -ne "$expected" ]; then
+            echo "::error::Socket Basics exited ${rc} with ${findings} high/critical finding(s); expected exit ${expected}"
+            exit 1
+          fi
+
           if [ "${findings:-0}" -gt 0 ]; then
             echo "::warning::Socket Basics found ${findings} high/critical finding(s)"
           fi
