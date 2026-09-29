@@ -22,10 +22,8 @@ jobs:
     steps:
       - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
         with:
-          # The scan step mounts the whole workspace, including .git, into a
-          # third-party container. Leaving the workflow token in .git/config
-          # would hand that container a credential it has no need for.
-          # Nothing here performs authenticated git operations.
+          # Remove the GitHub token from the workspace after checkout, so it is
+          # not mounted into the Socket Basics container, which doesn't need it.
           persist-credentials: false
 
       - name: Run Socket Basics
@@ -34,6 +32,10 @@ jobs:
           SOCKET_ORG: stellar
         run: |
           set +e
+          # Socket Basics is pinned by digest since rule tuning is calibrated
+          # to the exact ruleset contained in this image. Automatic updates
+          # could introduce new rules and a sudden increase in false
+          # positives, as these tools are generally noisy without tuning.
           docker run --rm \
             -v "$PWD:/github/workspace" \
             -w /github/workspace \
