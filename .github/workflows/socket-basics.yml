@@ -52,5 +52,11 @@ jobs:
             fi
             exit 0
           fi
-          echo "::error::Socket Basics did not complete (docker exit $rc)"
-          exit "${rc:-1}"
+          # An incomplete scan must fail. ${rc:-1} would NOT do that when the
+          # container exits 0 without printing the marker: rc is then the
+          # string "0", which is set and non-empty, so :- does not substitute
+          # and the job exits 0 -- green, with an error annotation nobody acts
+          # on (annotations do not fail a job; only a non-zero exit does).
+          echo "::error::Socket Basics did not complete (docker exit ${rc:-unknown})"
+          if [ "${rc:-0}" -eq 0 ]; then rc=1; fi
+          exit "$rc"
