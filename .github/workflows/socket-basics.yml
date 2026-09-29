@@ -21,6 +21,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+        with:
+          # The scan step mounts the whole workspace, including .git, into a
+          # third-party container. Leaving the workflow token in .git/config
+          # would hand that container a credential it has no need for.
+          # Nothing here performs authenticated git operations.
+          persist-credentials: false
 
       - name: Run Socket Basics
         env:
