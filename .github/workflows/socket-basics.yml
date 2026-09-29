@@ -3,9 +3,8 @@
 # Scanner settings live in .socket-basics.json; SAST path exclusions live in
 # .semgrepignore.
 #
-# This workflow does SAST through OpenGrep, secret scanning through TruffleHog,
-# Dockerfile misconfiguration scanning through Trivy, and submits results to
-# Socket.dev
+# This workflow does SAST through OpenGrep and secret scanning through
+# TruffleHog, and submits results to Socket.dev
 
 name: Socket Basics security scan
 
