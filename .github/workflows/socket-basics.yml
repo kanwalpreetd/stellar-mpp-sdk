@@ -40,18 +40,14 @@ jobs:
             --config .socket-basics.json 2>&1 | tee /tmp/socket-basics.log
           rc=${PIPESTATUS[0]}
 
-          # Health is read from .socket.facts.json, not from the log. The
-          # scanner creates that file empty before it starts and fills it as it
-          # goes, so components > 0 means it really examined files. Counting
-          # alerts whose action is error or warn reproduces the scanner's own
-          # high/critical tally. Neither depends on log wording.
+          # Examine components count in .socket.facts.json to establish if the
+          # scan ran successfully, and count alerts whose action is error or
+          # warn in .socket.facts.json to decide on the warning annotation.
           components=$(python3 -c 'import json;d=json.load(open(".socket.facts.json"));print(len(d.get("components") or []))' 2>/dev/null || echo 0)
           findings=$(python3 -c 'import json;d=json.load(open(".socket.facts.json"));print(sum(1 for c in (d.get("components") or []) for a in (c.get("alerts") or []) if a.get("action") in ("error","warn")))' 2>/dev/null || echo 0)
 
           if [ "${components:-0}" -eq 0 ]; then
-            # Note ${rc:-1} would NOT fail here when the container exits 0:
-            # rc is then the string "0", which is set and non-empty, so :- does
-            # not substitute. Annotations alone never fail a job either.
+            # ${rc:-1} would not fail here: rc is the string "0", which :- does not substitute.
             echo "::error::Socket Basics did not complete: no results in .socket.facts.json (docker exit ${rc:-unknown})"
             if [ "${rc:-0}" -eq 0 ]; then rc=1; fi
             exit "$rc"
